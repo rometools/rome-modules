@@ -1,0 +1,17 @@
+org.rometools.feed.module
+org.rometools.feed.module.activitystreams.types
+org.rometools.feed.module.base.io
+org.rometools.feed.module.base.types
+org.rometools.feed.module.cc.io
+org.rometools.feed.module.content
+org.rometools.feed.module.georss
+org.rometools.feed.module.itunes
+org.rometools.feed.module.itunes.types
+org.rometools.feed.module.mediarss
+org.rometools.feed.module.mediarss.types
+org.rometools.feed.module.opensearch
+org.rometools.feed.module.photocast.io
+org.rometools.feed.module.sle
+org.rometools.feed.module.sle.io
+org.rometools.feed.module.sse
+org.rometools.feed.module.yahooweather.io
