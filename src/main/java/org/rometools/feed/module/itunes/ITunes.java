@@ -40,104 +40,153 @@
 
 package org.rometools.feed.module.itunes;
 
+import java.net.URL;
+
 import com.sun.syndication.feed.module.Module;
 
 /**
  * This interface contains the methods common to all iTunes module points.
- *
+ * 
  * @author <a href="mailto:cooper@screaming-penguin.com">Robert "kebernet" Cooper</a>
  * @version $Revision: 1.3 $
  */
 public interface ITunes extends Module {
-
-    public static final String URI = AbstractITunesObject.URI;
+    /**
+     * Marker for podcasts containing explicit material.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#explicit
+     */
+    enum Explicit {
+        yes, no, clean
+    }
 
     /**
-     * Returns the author string for this feed or entry
-     *
+     * Namespace-URL.
+     */
+    String URI = AbstractITunesObject.URI;
+
+    /**
+     * Returns the author string for this feed or entry.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#authorId
      * @return Returns the author string for this feed or entry
      */
-    public String getAuthor();
+    String getAuthor();
 
     /**
-     * Sets the author string for this feed or entry
-     *
+     * Sets the author string for this feed or entry.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#authorId
      * @param author Sets the author string for this feed or entry
      */
-    public void setAuthor(String author);
+    void setAuthor(String author);
 
     /**
-     * Boolean as to whether to block this feed or entry
-     *
+     * Boolean as to whether to block this feed or entry.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#block
      * @return Boolean as to whether to block this feed or entry
      */
-    public boolean getBlock();
+    boolean getBlock();
 
     /**
-     * Boolean as to whether to block this feed or entry
-     *
+     * Boolean as to whether to block this feed or entry.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#block
      * @param block Boolean as to whether to block this feed or entry
      */
-    public void setBlock(boolean block);
+    void setBlock(boolean block);
 
     /**
-     * Boolean as to whether this feed or entry contains adult content
-     *
-     * @return Boolean as to whether this feed or entry contains adult content
+     * whether this feed or entry contains adult content or not.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#explicit
+     * @return explicit state as to whether this feed or entry contains adult content
      */
-    public boolean getExplicit();
+    Explicit getExplicit();
 
     /**
-     * Boolean as to whether this feed or entry contains adult content
-     *
-     * @param explicit Boolean as to whether this feed or entry contains adult content
+     * whether this feed or entry contains adult content or not.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#explicit
+     * @param explicit explicit state as to whether this feed or entry contains adult content
      */
-    public void setExplicit(boolean explicit);
+    void setExplicit(Explicit explicit);
 
     /**
-     * A list of keywords for this feed or entry
-     *
+     * Sets the URL for the image.
+     * 
+     * NOTE: To specification images should be in PNG or JPEG format.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#image
+     * @param image Sets the URL for the image.
+     */
+    void setImage(URL image);
+
+    /**
+     * Returns the URL for the image.
+     * 
+     * NOTE: To specification images should be in PNG or JPEG format.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#image
+     * @return Returns the URL for the image.
+     */
+    URL getImage();
+
+    /**
+     * A list of keywords for this feed or entry.
+     * 
      * Must not contain spaces
-     *
+     * 
+     * NOTE: Not referenced on http://www.apple.com/itunes/podcasts/specs.html!
+     * 
      * @return A list of keywords for this feed or entry
+     * @deprecated
      */
-    public String[] getKeywords();
+    String[] getKeywords();
 
     /**
-     * A list of keywords for this feed or entry
-     *
+     * A list of keywords for this feed or entry.
+     * 
      * Must not contain spaces
-     *
-     * @param keywords A list of keywords for this feed or enty
+     * 
+     * NOTE: Not referenced on http://www.apple.com/itunes/podcasts/specs.html!
+     * 
+     * @param keywords A list of keywords for this feed or entry
+     * @deprecated
      */
-    public void setKeywords(String[] keywords);
+    void setKeywords(String[] keywords);
 
     /**
-     * A subtitle for this feed or entry
-     *
+     * A subtitle for this feed or entry.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#subtitle
      * @return A subtitle for this feed or entry
      */
-    public String getSubtitle();
+    String getSubtitle();
 
     /**
-     * A subtitle for this feed or entry
-     *
+     * A subtitle for this feed or entry.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#subtitle
      * @param subtitle A subtitle for this feed or entry
      */
-    public void setSubtitle(String subtitle);
+    void setSubtitle(String subtitle);
 
     /**
-     * A subtitle for this feed or entry
-     *
+     * A subtitle for this feed or entry.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#summary
      * @return A subtitle for this feed or entry
      */
-    public String getSummary();
+    String getSummary();
 
     /**
-     * A subtitle for this feed or entry
-     *
+     * A subtitle for this feed or entry.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#summary
      * @param summary A subtitle for this feed or entry
      */
-    public void setSummary(String summary);
+    void setSummary(String summary);
 
 }

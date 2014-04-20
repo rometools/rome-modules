@@ -40,10 +40,12 @@
  */
 package org.rometools.feed.module.itunes;
 
+import java.net.URL;
+import java.util.Arrays;
+
 /**
- * This is an abstract object that implements the attributes common across Feeds or Items in an
- * iTunes compatible RSS feed.
- *
+ * This is an abstract object that implements the attributes common across Feeds or Items in an iTunes compatible RSS feed.
+ * 
  * @version $Revision: 1.4 $
  * @author <a href="mailto:cooper@screaming-penguin.com">Robert "kebernet" Cooper</a>
  */
@@ -73,14 +75,15 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     public static final String PREFIX = "itunes";
     private String author;
     private boolean block;
-    private boolean explicit;
-    private String[] keywords;
+    private Explicit explicit;
+    private String[] keywords = new String[0];
     private String subtitle;
     private String summary;
+    private URL image;
 
     /**
-     * Defined by the ROME API
-     *
+     * Defined by the ROME API.
+     * 
      * @return Class of the Interface for this module.
      */
     @Override
@@ -89,8 +92,8 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * The URI this module implements
-     *
+     * The URI this module implements.
+     * 
      * @return "http://www.itunes.com/dtds/podcast-1.0.dtd"
      */
     @Override
@@ -99,16 +102,16 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * Required by the ROME API
-     *
+     * Required by the ROME API.
+     * 
      * @return A clone of this module object
      */
     @Override
     public abstract Object clone();
 
     /**
-     * Returns the author string for this feed or entry
-     *
+     * Returns the author string for this feed or entry.
+     * 
      * @return Returns the author string for this feed or entry
      */
     @Override
@@ -117,8 +120,8 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * Sets the author string for this feed or entry
-     *
+     * Sets the author string for this feed or entry.
+     * 
      * @param author Sets the author string for this feed or entry
      */
     @Override
@@ -127,8 +130,8 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * Boolean as to whether to block this feed or entry
-     *
+     * Boolean as to whether to block this feed or entry.
+     * 
      * @return Boolean as to whether to block this feed or entry
      */
     @Override
@@ -137,8 +140,8 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * Boolean as to whether to block this feed or entry
-     *
+     * Boolean as to whether to block this feed or entry.
+     * 
      * @param block Boolean as to whether to block this feed or entry
      */
     @Override
@@ -147,52 +150,80 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * Boolean as to whether this feed or entry contains adult content
-     *
+     * Boolean as to whether this feed or entry contains adult content.
+     * 
      * @return Boolean as to whether this feed or entry contains adult content
      */
     @Override
-    public boolean getExplicit() {
+    public Explicit getExplicit() {
         return explicit;
     }
 
     /**
-     * Boolean as to whether this feed or entry contains adult content
-     *
+     * Boolean as to whether this feed or entry contains adult content.
+     * 
      * @param explicit Boolean as to whether this feed or entry contains adult content
      */
     @Override
-    public void setExplicit(final boolean explicit) {
+    public void setExplicit(final Explicit explicit) {
         this.explicit = explicit;
     }
 
     /**
-     * A list of keywords for this feed or entry
-     *
+     * Returns the URL for the image.
+     * 
+     * NOTE: To specification images should be in PNG or JPEG format.
+     * 
+     * @return Returns the URL for the image.
+     */
+    @Override
+    public URL getImage() {
+        return image;
+    }
+
+    /**
+     * Sets the URL for the image.
+     * 
+     * NOTE: To specification images should be in PNG or JPEG format.
+     * 
+     * @param image Sets the URL for the image.
+     */
+    @Override
+    public void setImage(final URL image) {
+        this.image = image;
+    }
+
+    /**
+     * A list of keywords for this feed or entry.
+     * 
      * Must not contain spaces
-     *
+     * 
      * @return A list of keywords for this feed or entry
      */
     @Override
     public String[] getKeywords() {
-        return keywords == null ? new String[0] : keywords;
+        return keywords;
     }
 
     /**
-     * A list of keywords for this feed or entry
-     *
+     * A list of keywords for this feed or entry.
+     * 
      * Must not contain spaces
-     *
+     * 
      * @param keywords A list of keywords for this feed or enty
      */
     @Override
     public void setKeywords(final String[] keywords) {
-        this.keywords = keywords;
+        if (keywords == null) {
+            this.keywords = new String[0];
+        } else {
+            this.keywords = keywords;
+        }
     }
 
     /**
-     * A subtitle for this feed or entry
-     *
+     * A subtitle for this feed or entry.
+     * 
      * @return A subtitle for this feed or entry
      */
     @Override
@@ -201,8 +232,8 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * A subtitle for this feed or entry
-     *
+     * A subtitle for this feed or entry.
+     * 
      * @param subtitle A subtitle for this feed or entry
      */
     @Override
@@ -211,8 +242,8 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * A subtitle for this feed or entry
-     *
+     * A subtitle for this feed or entry.
+     * 
      * @return A subtitle for this feed or entry
      */
     @Override
@@ -221,8 +252,8 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * A subtitle for this feed or entry
-     *
+     * A subtitle for this feed or entry.
+     * 
      * @param summary A subtitle for this feed or entry
      */
     @Override
@@ -230,29 +261,78 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
         this.summary = summary;
     }
 
+    //CHECKSTYLE:OFF
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (author == null ? 0 : author.hashCode());
+        result = prime * result + (block ? 1231 : 1237);
+        result = prime * result + (explicit == null ? 0 : explicit.hashCode());
+        result = prime * result + (image == null ? 0 : image.hashCode());
+        result = prime * result + Arrays.hashCode(keywords);
+        result = prime * result + (subtitle == null ? 0 : subtitle.hashCode());
+        result = prime * result + (summary == null ? 0 : summary.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AbstractITunesObject other = (AbstractITunesObject) obj;
+        if (author == null) {
+            if (other.author != null) {
+                return false;
+            }
+        } else if (!author.equals(other.author)) {
+            return false;
+        }
+        if (block != other.block) {
+            return false;
+        }
+        if (explicit != other.explicit) {
+            return false;
+        }
+        if (image == null) {
+            if (other.image != null) {
+                return false;
+            }
+        } else if (!image.equals(other.image)) {
+            return false;
+        }
+        if (!Arrays.equals(keywords, other.keywords)) {
+            return false;
+        }
+        if (subtitle == null) {
+            if (other.subtitle != null) {
+                return false;
+            }
+        } else if (!subtitle.equals(other.subtitle)) {
+            return false;
+        }
+        if (summary == null) {
+            if (other.summary != null) {
+                return false;
+            }
+        } else if (!summary.equals(other.summary)) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("[");
-        sb.append(" Author: ");
-        sb.append(getAuthor());
-        sb.append(" Block: ");
-        sb.append(getBlock());
-        sb.append(" Explicit: ");
-        sb.append(getExplicit());
-        sb.append(" Keywords: ");
-
-        if (getKeywords() != null) {
-            for (int i = 0; i < keywords.length; i++) {
-                sb.append("'" + getKeywords()[i] + "'");
-            }
-        }
-
-        sb.append(" Subtitle: ");
-        sb.append(getSubtitle());
-        sb.append(" Summary: ");
-        sb.append(getSummary());
-        sb.append("]");
-
-        return sb.toString();
+        return ", author=" + author + ", block=" + block + ", explicit=" + explicit + ", keywords=" + Arrays.toString(keywords)
+                + ", subtitle=" + subtitle + ", summary=" + summary + ", image=" + image;
     }
+    //CHECKSTYLE:ON
+
 }

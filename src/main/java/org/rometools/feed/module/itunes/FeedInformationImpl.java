@@ -41,53 +41,50 @@
  */
 package org.rometools.feed.module.itunes;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.rometools.feed.module.itunes.types.Category;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.sun.syndication.feed.CopyFrom;
 
 /**
  * This class contains information for iTunes podcast feeds that exist at the Channel level.
- *
+ * 
  * @version $Revision: 1.2 $
  * @author <a href="mailto:cooper@screaming-penguin.com">Robert "kebernet" Cooper</a>
  */
 public class FeedInformationImpl extends AbstractITunesObject implements FeedInformation {
-
-    private static final long serialVersionUID = 1L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(FeedInformationImpl.class);
-
+    private static final long serialVersionUID = -8291798441032794096L;
     private String ownerName;
     private String ownerEmailAddress;
-    private URL image;
     private List<Category> categories;
+    private URL newFeedUrl;
+    private Boolean complete;
 
     /**
-     * Creates a new instance of FeedInformationImpl
+     * Creates a new instance of FeedInformationImpl.
      */
     public FeedInformationImpl() {
     }
 
     /**
-     * The parent categories for this feed
-     *
+     * The parent categories for this feed.
+     * 
      * @return The parent categories for this feed
      */
     @Override
     public List<Category> getCategories() {
-        return categories == null ? (categories = new ArrayList<Category>()) : categories;
+        if (categories == null) {
+            categories = new ArrayList<Category>();
+        }
+        return categories;
     }
 
     /**
-     * The parent categories for this feed
-     *
+     * The parent categories for this feed.
+     * 
      * @param categories The parent categories for this feed
      */
     @Override
@@ -95,9 +92,29 @@ public class FeedInformationImpl extends AbstractITunesObject implements FeedInf
         this.categories = categories;
     }
 
+    @Override
+    public Boolean getComplete() {
+        return complete;
+    }
+
+    @Override
+    public void setComplete(final Boolean complete) {
+        this.complete = complete;
+    }
+
+    @Override
+    public URL getNewFeedUrl() {
+        return newFeedUrl;
+    }
+
+    @Override
+    public void setNewFeedUrl(final URL newFeedUrl) {
+        this.newFeedUrl = newFeedUrl;
+    }
+
     /**
-     * Returns the owner name for the feed
-     *
+     * Returns the owner name for the feed.
+     * 
      * @return Returns the owner name for the feed
      */
     @Override
@@ -106,8 +123,8 @@ public class FeedInformationImpl extends AbstractITunesObject implements FeedInf
     }
 
     /**
-     * Sets the owner name for the feed
-     *
+     * Sets the owner name for the feed.
+     * 
      * @param ownerName Sets the owner name for the feed
      */
     @Override
@@ -117,7 +134,7 @@ public class FeedInformationImpl extends AbstractITunesObject implements FeedInf
 
     /**
      * Returns the owner email address for the feed.
-     *
+     * 
      * @return Returns the owner email address for the feed.
      */
     @Override
@@ -127,7 +144,7 @@ public class FeedInformationImpl extends AbstractITunesObject implements FeedInf
 
     /**
      * Sets the owner email address for the feed.
-     *
+     * 
      * @param ownerEmailAddress Sets the owner email address for the feed.
      */
     @Override
@@ -136,32 +153,8 @@ public class FeedInformationImpl extends AbstractITunesObject implements FeedInf
     }
 
     /**
-     * Returns the URL for the image.
-     *
-     * NOTE: To specification images should be in PNG or JPEG format.
-     *
-     * @return Returns the URL for the image.
-     */
-    @Override
-    public URL getImage() {
-        return image;
-    }
-
-    /**
-     * Sets the URL for the image.
-     *
-     * NOTE: To specification images should be in PNG or JPEG format.
-     *
-     * @param image Sets the URL for the image.
-     */
-    @Override
-    public void setImage(final URL image) {
-        this.image = image;
-    }
-
-    /**
-     * Required by the ROME API
-     *
+     * Required by the ROME API.
+     * 
      * @param obj object to copy property values from
      */
     @Override
@@ -169,26 +162,17 @@ public class FeedInformationImpl extends AbstractITunesObject implements FeedInf
         final FeedInformationImpl info = (FeedInformationImpl) obj;
         setAuthor(info.getAuthor());
         setBlock(info.getBlock());
-
         getCategories().clear();
         if (info.getCategories() != null) {
             getCategories().addAll(info.getCategories());
         }
-
+        setComplete(info.getComplete());
         setExplicit(info.getExplicit());
-
-        try {
-            if (info.getImage() != null) {
-                setImage(new URL(info.getImage().toExternalForm()));
-            }
-        } catch (final MalformedURLException e) {
-            LOG.debug("Error copying URL:" + info.getImage(), e);
-        }
-
+        setImage(info.getImage());
         if (info.getKeywords() != null) {
             setKeywords(info.getKeywords().clone());
         }
-
+        setNewFeedUrl(info.getNewFeedUrl());
         setOwnerEmailAddress(info.getOwnerEmailAddress());
         setOwnerName(info.getOwnerName());
         setSubtitle(info.getSubtitle());
@@ -196,8 +180,8 @@ public class FeedInformationImpl extends AbstractITunesObject implements FeedInf
     }
 
     /**
-     * Returns a copy of this FeedInformationImpl object
-     *
+     * Returns a copy of this FeedInformationImpl object.
+     * 
      * @return Returns a copy of this FeedInformationImpl object
      */
     @Override
@@ -208,20 +192,73 @@ public class FeedInformationImpl extends AbstractITunesObject implements FeedInf
         return info;
     }
 
+    //CHECKSTYLE:OFF
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((categories == null) ? 0 : categories.hashCode());
+        result = prime * result + ((complete == null) ? 0 : complete.hashCode());
+        result = prime * result + ((newFeedUrl == null) ? 0 : newFeedUrl.hashCode());
+        result = prime * result + ((ownerEmailAddress == null) ? 0 : ownerEmailAddress.hashCode());
+        result = prime * result + ((ownerName == null) ? 0 : ownerName.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        FeedInformationImpl other = (FeedInformationImpl) obj;
+        if (categories == null) {
+            if (other.categories != null) {
+                return false;
+            }
+        } else if (!categories.equals(other.categories)) {
+            return false;
+        }
+        if (complete == null) {
+            if (other.complete != null) {
+                return false;
+            }
+        } else if (!complete.equals(other.complete)) {
+            return false;
+        }
+        if (newFeedUrl == null) {
+            if (other.newFeedUrl != null) {
+                return false;
+            }
+        } else if (!newFeedUrl.equals(other.newFeedUrl)) {
+            return false;
+        }
+        if (ownerEmailAddress == null) {
+            if (other.ownerEmailAddress != null) {
+                return false;
+            }
+        } else if (!ownerEmailAddress.equals(other.ownerEmailAddress)) {
+            return false;
+        }
+        if (ownerName == null) {
+            if (other.ownerName != null) {
+                return false;
+            }
+        } else if (!ownerName.equals(other.ownerName)) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("[");
-        sb.append(" email: ");
-        sb.append(getOwnerEmailAddress());
-        sb.append(" name: ");
-        sb.append(getOwnerName());
-        sb.append(" image: ");
-        sb.append(getImage());
-        sb.append(" categories: ");
-        sb.append(getCategories());
-        sb.append("]");
-        sb.append(super.toString());
-
-        return sb.toString();
+        return "FeedInformationImpl [ownerName=" + ownerName + ", ownerEmailAddress=" + ownerEmailAddress + ", categories=" + categories + ", newFeedUrl="
+                + newFeedUrl + ", complete=" + complete + super.toString() + "]";
     }
+    //CHECKSTYLE:ON
 }

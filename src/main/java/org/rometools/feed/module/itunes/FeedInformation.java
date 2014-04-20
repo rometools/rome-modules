@@ -47,69 +47,93 @@ import org.rometools.feed.module.itunes.types.Category;
 
 /**
  * This class contains information for iTunes podcast feeds that exist at the Channel level.
- *
+ * 
  * @author <a href="mailto:cooper@screaming-penguin.com">Robert "kebernet" Cooper</a>
  * @version $Revision: 1.2 $
  */
 public interface FeedInformation extends ITunes {
 
     /**
-     * The parent categories for this feed
-     *
+     * The parent categories for this feed.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#category
      * @return The parent categories for this feed
      */
-    public List<Category> getCategories();
+    List<Category> getCategories();
 
     /**
-     * The parent categories for this feed
-     *
+     * The parent categories for this feed.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#category
      * @param categories The parent categories for this feed
      */
-    public void setCategories(List<Category> categories);
+    void setCategories(List<Category> categories);
 
     /**
-     * Sets the URL for the image.
-     *
-     * NOTE: To specification images should be in PNG or JPEG format.
-     *
-     * @param image Sets the URL for the image.
+     * indicate the completion of a podcast.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#complete
+     * @return {@code true} if no more episodes will be added to the podcast
      */
-    public void setImage(URL image);
+    Boolean getComplete();
 
     /**
-     * Returns the URL for the image.
-     *
-     * NOTE: To specification images should be in PNG or JPEG format.
-     *
-     * @return Returns the URL for the image.
+     * For changing the feed url.
+     * 
+     * NOTE: the old feed URL should be maintained for 48 hours.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#newfeed
+     * @return URL of new feed location
      */
-    public URL getImage();
+    URL getNewFeedUrl();
+
+    /**
+     * For changing the feed url.
+     * 
+     * NOTE: the old feed URL should be maintained for 48 hours.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#newfeed
+     * @param newFeedUrl URL of new feed location
+     */
+    void setNewFeedUrl(URL newFeedUrl);
+
+    /**
+     * indicate the completion of a podcast.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#complete
+     * @param complete {@code true} if no more episodes will be added to the podcast
+     */
+    void setComplete(Boolean complete);
 
     /**
      * Sets the owner email address for the feed.
-     *
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#owner
      * @param ownerEmailAddress Sets the owner email address for the feed.
      */
-    public void setOwnerEmailAddress(String ownerEmailAddress);
+    void setOwnerEmailAddress(String ownerEmailAddress);
 
     /**
      * Returns the owner email address for the feed.
-     *
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#owner
      * @return Returns the owner email address for the feed.
      */
-    public String getOwnerEmailAddress();
+    String getOwnerEmailAddress();
 
     /**
-     * Sets the owner name for the feed
-     *
+     * Sets the owner name for the feed.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#owner
      * @param ownerName Sets the owner name for the feed
      */
-    public void setOwnerName(String ownerName);
+    void setOwnerName(String ownerName);
 
     /**
-     * Returns the owner name for the feed
-     *
+     * Returns the owner name for the feed.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#owner
      * @return Returns the owner name for the feed
      */
-    public String getOwnerName();
+    String getOwnerName();
 }

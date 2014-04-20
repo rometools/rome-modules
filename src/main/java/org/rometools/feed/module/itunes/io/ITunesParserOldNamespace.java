@@ -28,12 +28,11 @@ import org.jdom2.Namespace;
  * @author <a href="mailto:cooper@screaming-penguin.com">Robert "kebernet" Cooper</a>
  */
 public class ITunesParserOldNamespace extends ITunesParser {
-    String URI = "http://www.itunes.com/DTDs/Podcast-1.0.dtd";
+    private static final String URI = "http://www.itunes.com/DTDs/Podcast-1.0.dtd";
 
-    /** Creates a new instance of ITunesParserOldNamespace */
+    /** Creates a new instance of ITunesParserOldNamespace. */
     public ITunesParserOldNamespace() {
-        super();
-        super.ns = Namespace.getNamespace(URI);
+        super(Namespace.getNamespace(URI));
     }
 
     @Override

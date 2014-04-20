@@ -45,25 +45,66 @@ import org.rometools.feed.module.itunes.types.Duration;
 
 /**
  * This class contains information for iTunes podcast feeds that exist at the Item level.
- *
+ * 
  * @author <a href="mailto:cooper@screaming-penguin.com">Robert "kebernet" Cooper</a>
  * @version $Revision: 1.2 $
- *
+ * 
  */
 public interface EntryInformation extends ITunes {
+    /**
+     * marker for closed captioning support on video.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#isClosedCaptioned
+     */
+    enum ClosedCaptioned {
+        yes, no
+    }
 
     /**
-     * Returns the Duration object for this Item
-     *
+     * Returns the Duration object for this Item.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#duration
      * @return Returns the Duration object for this Item
      */
-    public Duration getDuration();
+    Duration getDuration();
 
     /**
-     * Sets the Duration object for this Item
-     *
+     * Sets the Duration object for this Item.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#duration
      * @param duration Sets the Duration object for this Item
      */
-    public void setDuration(Duration duration);
+    void setDuration(Duration duration);
 
+    /**
+     * Marker for video with embedded closed captioning support.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#isClosedCaptioned
+     * @return closed captioning support
+     */
+    ClosedCaptioned getClosedCaptioned();
+
+    /**
+     * Marker for video with embedded closed captioning support.
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#isClosedCaptioned
+     * @param closedCaptioned closed captioning support
+     */
+    void setClosedCaptioned(ClosedCaptioned closedCaptioned);
+
+    /**
+     * Override episode ordering (default by pubDate).
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#order
+     * @return overriden order index
+     */
+    Integer getOrder();
+
+    /**
+     * Override episode ordering (default by pubDate).
+     * 
+     * @see http://www.apple.com/itunes/podcasts/specs.html#order
+     * @param order overriden order index
+     */
+    void setOrder(Integer order);
 }

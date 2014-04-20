@@ -51,14 +51,17 @@ import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.output.XMLOutputter;
 import org.rometools.feed.module.itunes.AbstractITunesObject;
+import org.rometools.feed.module.itunes.EntryInformation.ClosedCaptioned;
 import org.rometools.feed.module.itunes.EntryInformationImpl;
 import org.rometools.feed.module.itunes.FeedInformationImpl;
+import org.rometools.feed.module.itunes.ITunes.Explicit;
 import org.rometools.feed.module.itunes.types.Category;
 import org.rometools.feed.module.itunes.types.Duration;
 import org.rometools.feed.module.itunes.types.Subcategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.rometools.utils.Integers;
 import com.sun.syndication.io.ModuleParser;
 import com.sun.syndication.io.WireFeedParser;
 
@@ -70,12 +73,23 @@ public class ITunesParser implements ModuleParser {
 
     private static final Logger LOG = LoggerFactory.getLogger(ITunesParser.class);
 
-    Namespace ns = Namespace.getNamespace(AbstractITunesObject.URI);
+    private final Namespace ns;
 
-    /** Creates a new instance of ITunesParser */
+    /** Creates a new instance of ITunesParser. */
     public ITunesParser() {
+        this(Namespace.getNamespace(AbstractITunesObject.URI));
     }
 
+    /**
+     * @param ns target namespace
+     */
+    protected ITunesParser(final Namespace ns) {
+        this.ns = ns;
+    }
+
+    /**
+     * @param feedParser ignored
+     */
     public void setParser(final WireFeedParser feedParser) {
     }
 
@@ -109,14 +123,12 @@ public class ITunesParser implements ModuleParser {
                 }
             }
 
-            final Element image = element.getChild("image", ns);
-
-            if (image != null && image.getAttributeValue("href") != null) {
+            final Element newFeedUrl = element.getChild("new-feed-url", ns);
+            if (newFeedUrl != null) {
                 try {
-                    final URL imageURL = new URL(image.getAttributeValue("href").trim());
-                    feedInfo.setImage(imageURL);
+                    feedInfo.setNewFeedUrl(new URL(newFeedUrl.getTextTrim()));
                 } catch (final MalformedURLException e) {
-                    LOG.debug("Malformed URL Exception reading itunes:image tag: {}", image.getAttributeValue("href"));
+                    LOG.debug("Malformed URL Exception reading itunes:new-feed-url tag: {}", newFeedUrl.getTextTrim());
                 }
             }
 
@@ -139,6 +151,11 @@ public class ITunesParser implements ModuleParser {
                 }
             }
 
+            final Element complete = element.getChild("complete", ns);
+            if (complete != null) {
+                feedInfo.setComplete("yes".equals(complete.getTextTrim().toLowerCase()));
+            }
+
         } else if (element.getName().equals("item")) {
             final EntryInformationImpl entryInfo = new EntryInformationImpl();
             module = entryInfo;
@@ -146,10 +163,19 @@ public class ITunesParser implements ModuleParser {
             // Now I am going to get the item specific tags
 
             final Element duration = element.getChild("duration", ns);
-
             if (duration != null && duration.getValue() != null) {
                 final Duration dur = new Duration(duration.getValue().trim());
                 entryInfo.setDuration(dur);
+            }
+
+            final Element isClosedCaptioned = element.getChild("isClosedCaptioned", ns);
+            if (isClosedCaptioned != null) {
+                entryInfo.setClosedCaptioned(ClosedCaptioned.valueOf(isClosedCaptioned.getTextTrim().toLowerCase()));
+            }
+
+            final Element order = element.getChild("order", ns);
+            if (order != null) {
+                entryInfo.setOrder(Integers.parse(order.getTextTrim()));
             }
         }
         if (module != null) {
@@ -161,15 +187,23 @@ public class ITunesParser implements ModuleParser {
             }
 
             final Element block = element.getChild("block", ns);
-
             if (block != null) {
-                module.setBlock(true);
+                module.setBlock("yes".equals(block.getTextTrim().toLowerCase()));
             }
 
             final Element explicit = element.getChild("explicit", ns);
+            if (explicit != null) {
+                module.setExplicit(Explicit.valueOf(explicit.getTextTrim().toLowerCase()));
+            }
 
-            if (explicit != null && explicit.getValue() != null && explicit.getValue().trim().equalsIgnoreCase("yes")) {
-                module.setExplicit(true);
+            final Element image = element.getChild("image", ns);
+            if (image != null && image.getAttributeValue("href") != null) {
+                try {
+                    final URL imageURL = new URL(image.getAttributeValue("href").trim());
+                    module.setImage(imageURL);
+                } catch (final MalformedURLException e) {
+                    LOG.debug("Malformed URL Exception reading itunes:image tag: {}", image.getAttributeValue("href"));
+                }
             }
 
             final Element keywords = element.getChild("keywords", ns);
@@ -201,6 +235,10 @@ public class ITunesParser implements ModuleParser {
         return module;
     }
 
+    /**
+     * @param e source element
+     * @return text content of all child nodes
+     */
     protected String getXmlInnerText(final Element e) {
         final StringBuffer sb = new StringBuffer();
         final XMLOutputter xo = new XMLOutputter();
