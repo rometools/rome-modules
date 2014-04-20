@@ -134,11 +134,11 @@ public class Restriction implements Serializable {
     }
 
     /**
-     * Indicates the action of the relationship
+     * Indicates the action of the relationship.
      */
-    public static class Relationship {
+    public static final class Relationship {
         /**
-         * An Allow relationship
+         * An Allow relationship.
          */
         public static final Relationship ALLOW = new Relationship("allow");
 
@@ -148,6 +148,9 @@ public class Restriction implements Serializable {
         public static final Relationship DENY = new Relationship("deny");
         private final String value;
 
+        /**
+         * @param value realtion name
+         */
         private Relationship(final String value) {
             this.value = value;
         }
@@ -159,20 +162,26 @@ public class Restriction implements Serializable {
     }
 
     /**
-     * Indicated the type of the relationship
+     * Indicated the type of the relationship.
      */
-    public static class Type {
+    public static final class Type {
         /**
          * Indicates a Country type.
          */
         public static final Type COUNTRY = new Type("country");
-
+        /**
+         * Indicates a sharing type.
+         */
+        public static final Type SHARING = new Type("sharing");
         /**
          * Indicates a URI for a special restriction type.
          */
         public static final Type URI = new Type("uri");
         private final String value;
 
+        /**
+         * @param value type name
+         */
         private Type(final String value) {
             this.value = value;
         }
