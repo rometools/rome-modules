@@ -54,86 +54,52 @@ import com.rometools.modules.itunes.types.Category;
 public interface FeedInformation extends ITunes {
 
     /**
-     * The parent categories for this feed.
+     * The parent categories for this feed
      * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#category
      * @return The parent categories for this feed
      */
-    List<Category> getCategories();
+    public List<Category> getCategories();
 
     /**
-     * The parent categories for this feed.
+     * The parent categories for this feed
      * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#category
      * @param categories The parent categories for this feed
      */
-    void setCategories(List<Category> categories);
+    public void setCategories(List<Category> categories);
 
-    /**
-     * indicate the completion of a podcast.
-     * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#complete
-     * @return {@code true} if no more episodes will be added to the podcast
-     */
-    Boolean getComplete();
+    public Boolean getComplete();
 
-    /**
-     * For changing the feed url.
-     * 
-     * NOTE: the old feed URL should be maintained for 48 hours.
-     * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#newfeed
-     * @return URL of new feed location
-     */
-    URL getNewFeedUrl();
+    public void setComplete(Boolean complete);
 
-    /**
-     * For changing the feed url.
-     * 
-     * NOTE: the old feed URL should be maintained for 48 hours.
-     * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#newfeed
-     * @param newFeedUrl URL of new feed location
-     */
-    void setNewFeedUrl(URL newFeedUrl);
+    public URL getNewFeedUrl();
 
-    /**
-     * indicate the completion of a podcast.
-     * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#complete
-     * @param complete {@code true} if no more episodes will be added to the podcast
-     */
-    void setComplete(Boolean complete);
+    public void setNewFeedUrl(URL newFeedUrl);
 
     /**
      * Sets the owner email address for the feed.
      * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#owner
      * @param ownerEmailAddress Sets the owner email address for the feed.
      */
-    void setOwnerEmailAddress(String ownerEmailAddress);
+    public void setOwnerEmailAddress(String ownerEmailAddress);
 
     /**
      * Returns the owner email address for the feed.
      * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#owner
      * @return Returns the owner email address for the feed.
      */
-    String getOwnerEmailAddress();
+    public String getOwnerEmailAddress();
 
     /**
-     * Sets the owner name for the feed.
+     * Sets the owner name for the feed
      * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#owner
      * @param ownerName Sets the owner name for the feed
      */
-    void setOwnerName(String ownerName);
+    public void setOwnerName(String ownerName);
 
     /**
-     * Returns the owner name for the feed.
+     * Returns the owner name for the feed
      * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#owner
      * @return Returns the owner name for the feed
      */
-    String getOwnerName();
+    public String getOwnerName();
 }

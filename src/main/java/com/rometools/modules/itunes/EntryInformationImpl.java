@@ -40,6 +40,12 @@
  */
 package com.rometools.modules.itunes;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.rometools.modules.itunes.types.Duration;
 import com.rometools.rome.feed.CopyFrom;
 
@@ -54,28 +60,21 @@ public class EntryInformationImpl extends AbstractITunesObject implements EntryI
      *
      */
     private static final long serialVersionUID = 1L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(EntryInformationImpl.class);
+
     private Duration duration;
     private ClosedCaptioned closedCaptioned;
     private Integer order;
 
     /**
-     * Creates a new instance of EntryInformationImpl.
+     * Creates a new instance of EntryInformationImpl
      */
     public EntryInformationImpl() {
     }
 
-    @Override
-    public ClosedCaptioned getClosedCaptioned() {
-        return closedCaptioned;
-    }
-
-    @Override
-    public void setClosedCaptioned(final ClosedCaptioned closedCaptioned) {
-        this.closedCaptioned = closedCaptioned;
-    }
-
     /**
-     * Returns the Duration object for this Item.
+     * Returns the Duration object for this Item
      * 
      * @return Returns the Duration object for this Item
      */
@@ -92,6 +91,16 @@ public class EntryInformationImpl extends AbstractITunesObject implements EntryI
     @Override
     public void setDuration(final Duration duration) {
         this.duration = duration;
+    }
+
+    @Override
+    public ClosedCaptioned getClosedCaptioned() {
+        return closedCaptioned;
+    }
+
+    @Override
+    public void setClosedCaptioned(final ClosedCaptioned closedCaptioned) {
+        this.closedCaptioned = closedCaptioned;
     }
 
     @Override
@@ -114,22 +123,33 @@ public class EntryInformationImpl extends AbstractITunesObject implements EntryI
         final EntryInformationImpl info = (EntryInformationImpl) obj;
         setAuthor(info.getAuthor());
         setBlock(info.getBlock());
-        setClosedCaptioned(info.getClosedCaptioned());
+
         if (info.getDuration() != null) {
             setDuration(new Duration(info.getDuration().getMilliseconds()));
         }
+
         setExplicit(info.getExplicit());
-        setImage(info.getImage());
+
+        try {
+            if (info.getImage() != null) {
+                setImage(new URL(info.getImage().toExternalForm()));
+            }
+        } catch (final MalformedURLException e) {
+            LOG.debug("Error copying URL:" + info.getImage(), e);
+        }
+
         if (info.getKeywords() != null) {
             setKeywords(info.getKeywords().clone());
         }
-        setOrder(info.getOrder());
+
         setSubtitle(info.getSubtitle());
         setSummary(info.getSummary());
+        setClosedCaptioned(info.getClosedCaptioned());
+        setOrder(info.getOrder());
     }
 
     /**
-     * Required by the ROME API.
+     * Required by the ROME API
      * 
      * @return A clone of this module object
      */
@@ -141,52 +161,17 @@ public class EntryInformationImpl extends AbstractITunesObject implements EntryI
         return info;
     }
 
-    //CHECKSTYLE:OFF
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + (closedCaptioned == null ? 0 : closedCaptioned.hashCode());
-        result = prime * result + (duration == null ? 0 : duration.hashCode());
-        result = prime * result + (order == null ? 0 : order.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!super.equals(obj)) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final EntryInformationImpl other = (EntryInformationImpl) obj;
-        if (closedCaptioned != other.closedCaptioned) {
-            return false;
-        }
-        if (duration == null) {
-            if (other.duration != null) {
-                return false;
-            }
-        } else if (!duration.equals(other.duration)) {
-            return false;
-        }
-        if (order == null) {
-            if (other.order != null) {
-                return false;
-            }
-        } else if (!order.equals(other.order)) {
-            return false;
-        }
-        return true;
-    }
-
     @Override
     public String toString() {
-        return "EntryInformationImpl [duration=" + duration + ", closedCaptioned=" + closedCaptioned + ", order=" + order + super.toString() + "]";
+        StringBuilder builder = new StringBuilder();
+        builder.append("EntryInformationImpl [duration=");
+        builder.append(duration);
+        builder.append(", closedCaptioned=");
+        builder.append(closedCaptioned);
+        builder.append(", order=");
+        builder.append(order);
+        builder.append("]");
+        return builder.toString();
     }
-    //CHECKSTYLE:ON
+
 }

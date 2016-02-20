@@ -77,13 +77,13 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     private String author;
     private boolean block;
     private Explicit explicit;
-    private String[] keywords = new String[0];
+    private URL image;
+    private String[] keywords;
     private String subtitle;
     private String summary;
-    private URL image;
 
     /**
-     * Defined by the ROME API.
+     * Defined by the ROME API
      * 
      * @return Class of the Interface for this module.
      */
@@ -93,7 +93,7 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * The URI this module implements.
+     * The URI this module implements
      * 
      * @return "http://www.itunes.com/dtds/podcast-1.0.dtd"
      */
@@ -103,7 +103,7 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * Required by the ROME API.
+     * Required by the ROME API
      * 
      * @return A clone of this module object
      */
@@ -111,7 +111,7 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     public abstract Object clone();
 
     /**
-     * Returns the author string for this feed or entry.
+     * Returns the author string for this feed or entry
      * 
      * @return Returns the author string for this feed or entry
      */
@@ -121,7 +121,7 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * Sets the author string for this feed or entry.
+     * Sets the author string for this feed or entry
      * 
      * @param author Sets the author string for this feed or entry
      */
@@ -131,7 +131,7 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * Boolean as to whether to block this feed or entry.
+     * Boolean as to whether to block this feed or entry
      * 
      * @return Boolean as to whether to block this feed or entry
      */
@@ -141,7 +141,7 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * Boolean as to whether to block this feed or entry.
+     * Boolean as to whether to block this feed or entry
      * 
      * @param block Boolean as to whether to block this feed or entry
      */
@@ -151,7 +151,7 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * Boolean as to whether this feed or entry contains adult content.
+     * Boolean as to whether this feed or entry contains adult content
      * 
      * @return Boolean as to whether this feed or entry contains adult content
      */
@@ -161,7 +161,7 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * Boolean as to whether this feed or entry contains adult content.
+     * Boolean as to whether this feed or entry contains adult content
      * 
      * @param explicit Boolean as to whether this feed or entry contains adult content
      */
@@ -195,7 +195,7 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * A list of keywords for this feed or entry.
+     * A list of keywords for this feed or entry
      * 
      * Must not contain spaces
      * 
@@ -203,11 +203,11 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
      */
     @Override
     public String[] getKeywords() {
-        return keywords;
+        return keywords == null ? new String[0] : keywords;
     }
 
     /**
-     * A list of keywords for this feed or entry.
+     * A list of keywords for this feed or entry
      * 
      * Must not contain spaces
      * 
@@ -215,15 +215,11 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
      */
     @Override
     public void setKeywords(final String[] keywords) {
-        if (keywords == null) {
-            this.keywords = new String[0];
-        } else {
-            this.keywords = keywords;
-        }
+        this.keywords = keywords;
     }
 
     /**
-     * A subtitle for this feed or entry.
+     * A subtitle for this feed or entry
      * 
      * @return A subtitle for this feed or entry
      */
@@ -233,7 +229,7 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * A subtitle for this feed or entry.
+     * A subtitle for this feed or entry
      * 
      * @param subtitle A subtitle for this feed or entry
      */
@@ -243,7 +239,7 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * A subtitle for this feed or entry.
+     * A subtitle for this feed or entry
      * 
      * @return A subtitle for this feed or entry
      */
@@ -253,7 +249,7 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
     }
 
     /**
-     * A subtitle for this feed or entry.
+     * A subtitle for this feed or entry
      * 
      * @param summary A subtitle for this feed or entry
      */
@@ -262,79 +258,25 @@ public abstract class AbstractITunesObject implements ITunes, java.lang.Cloneabl
         this.summary = summary;
     }
 
-    //CHECKSTYLE:OFF
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (author == null ? 0 : author.hashCode());
-        result = prime * result + (block ? 1231 : 1237);
-        result = prime * result + (explicit == null ? 0 : explicit.hashCode());
-        result = prime * result + (image == null ? 0 : image.hashCode());
-        result = prime * result + Arrays.hashCode(keywords);
-        result = prime * result + (subtitle == null ? 0 : subtitle.hashCode());
-        result = prime * result + (summary == null ? 0 : summary.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final AbstractITunesObject other = (AbstractITunesObject) obj;
-        if (author == null) {
-            if (other.author != null) {
-                return false;
-            }
-        } else if (!author.equals(other.author)) {
-            return false;
-        }
-        if (block != other.block) {
-            return false;
-        }
-        if (explicit != other.explicit) {
-            return false;
-        }
-        if (image == null) {
-            if (other.image != null) {
-                return false;
-            }
-        } else if (!image.equals(other.image)) {
-            return false;
-        }
-        if (!Arrays.equals(keywords, other.keywords)) {
-            return false;
-        }
-        if (subtitle == null) {
-            if (other.subtitle != null) {
-                return false;
-            }
-        } else if (!subtitle.equals(other.subtitle)) {
-            return false;
-        }
-        if (summary == null) {
-            if (other.summary != null) {
-                return false;
-            }
-        } else if (!summary.equals(other.summary)) {
-            return false;
-        }
-        return true;
-    }
-
     @Override
     public String toString() {
-        return ", author=" + author + ", block=" + block + ", explicit=" + explicit + ", keywords=" + Arrays.toString(keywords)
-                + ", subtitle=" + subtitle + ", summary=" + summary + ", image=" + image;
+        StringBuilder builder = new StringBuilder();
+        builder.append("AbstractITunesObject [author=");
+        builder.append(author);
+        builder.append(", block=");
+        builder.append(block);
+        builder.append(", explicit=");
+        builder.append(explicit);
+        builder.append(", image=");
+        builder.append(image);
+        builder.append(", keywords=");
+        builder.append(Arrays.toString(keywords));
+        builder.append(", subtitle=");
+        builder.append(subtitle);
+        builder.append(", summary=");
+        builder.append(summary);
+        builder.append("]");
+        return builder.toString();
     }
-    //CHECKSTYLE:ON
 
 }
-

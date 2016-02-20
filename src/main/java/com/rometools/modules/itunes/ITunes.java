@@ -42,7 +42,7 @@ package com.rometools.modules.itunes;
 
 import java.net.URL;
 
-import com.rometools.rome.feed.module.Module;
+import com.rometools.rome.feed.module.Module; 
 
 /**
  * This interface contains the methods common to all iTunes module points.

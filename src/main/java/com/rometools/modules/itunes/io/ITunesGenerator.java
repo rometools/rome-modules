@@ -67,7 +67,7 @@ public class ITunesGenerator implements ModuleGenerator {
         NAMESPACES.add(NAMESPACE);
     }
 
-    /** Creates a new instance of ITunesGenerator. */
+    /** Creates a new instance of ITunesGenerator */
     public ITunesGenerator() {
     }
 
@@ -120,20 +120,20 @@ public class ITunesGenerator implements ModuleGenerator {
                     element.addContent(generateSimpleElement("complete", "no"));
                 }
             }
+
             if (info.getNewFeedUrl() != null) {
                 element.addContent(generateSimpleElement("new-feed-url", info.getNewFeedUrl().toExternalForm()));
             }
+
         } else if (itunes instanceof EntryInformationImpl) {
             final EntryInformationImpl info = (EntryInformationImpl) itunes;
-
-            if (info.getClosedCaptioned() != null) {
-                element.addContent(generateSimpleElement("isClosedCaptioned", info.getClosedCaptioned().name()));
-            }
 
             if (info.getDuration() != null) {
                 element.addContent(generateSimpleElement("duration", info.getDuration().toString()));
             }
-
+            if (info.getClosedCaptioned() != null) {
+                element.addContent(generateSimpleElement("isClosedCaptioned", info.getClosedCaptioned().name()));
+            }
             if (info.getOrder() != null) {
                 element.addContent(generateSimpleElement("order", info.getOrder().toString()));
             }
@@ -200,14 +200,10 @@ public class ITunesGenerator implements ModuleGenerator {
         return AbstractITunesObject.URI;
     }
 
-    /**
-     * @param name tag name
-     * @param value tag content
-     * @return new element
-     */
     protected Element generateSimpleElement(final String name, final String value) {
         final Element element = new Element(name, NAMESPACE);
         element.addContent(value);
+
         return element;
     }
 }

@@ -51,6 +51,7 @@ import com.rometools.modules.itunes.types.Duration;
  *
  */
 public interface EntryInformation extends ITunes {
+
     /**
      * marker for closed captioning support on video.
      * 
@@ -61,50 +62,24 @@ public interface EntryInformation extends ITunes {
     }
 
     /**
-     * Returns the Duration object for this Item.
-     * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#duration
+     * Returns the Duration object for this Item
+     *
      * @return Returns the Duration object for this Item
      */
-    Duration getDuration();
+    public Duration getDuration();
 
     /**
-     * Sets the Duration object for this Item.
-     * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#duration
+     * Sets the Duration object for this Item
+     *
      * @param duration Sets the Duration object for this Item
      */
-    void setDuration(Duration duration);
+    public void setDuration(Duration duration);
 
-    /**
-     * Marker for video with embedded closed captioning support.
-     * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#isClosedCaptioned
-     * @return closed captioning support
-     */
-    ClosedCaptioned getClosedCaptioned();
+    public ClosedCaptioned getClosedCaptioned();
 
-    /**
-     * Marker for video with embedded closed captioning support.
-     * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#isClosedCaptioned
-     * @param closedCaptioned closed captioning support
-     */
-    void setClosedCaptioned(ClosedCaptioned closedCaptioned);
+    public void setClosedCaptioned(ClosedCaptioned closedCaptioned);
 
-    /**
-     * Override episode ordering (default by pubDate).
-     * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#order
-     * @return overriden order index
-     */
-    Integer getOrder();
+    public Integer getOrder();
 
-    /**
-     * Override episode ordering (default by pubDate).
-     * 
-     * @see http://www.apple.com/itunes/podcasts/specs.html#order
-     * @param order overriden order index
-     */
-    void setOrder(Integer order);
+    public void setOrder(Integer order);
 }

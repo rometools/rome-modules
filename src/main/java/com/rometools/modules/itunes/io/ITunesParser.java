@@ -76,7 +76,7 @@ public class ITunesParser implements ModuleParser {
 
     private final Namespace ns;
 
-    /** Creates a new instance of ITunesParser. */
+    /** Creates a new instance of ITunesParser */
     public ITunesParser() {
         this(Namespace.getNamespace(AbstractITunesObject.URI));
     }
@@ -124,15 +124,6 @@ public class ITunesParser implements ModuleParser {
                 }
             }
 
-            final Element newFeedUrl = element.getChild("new-feed-url", ns);
-            if (newFeedUrl != null) {
-                try {
-                    feedInfo.setNewFeedUrl(new URL(newFeedUrl.getTextTrim()));
-                } catch (final MalformedURLException e) {
-                    LOG.debug("Malformed URL Exception reading itunes:new-feed-url tag: {}", newFeedUrl.getTextTrim());
-                }
-            }
-
             final List<Element> categories = element.getChildren("category", ns);
             for (final Element element2 : categories) {
                 final Element category = element2;
@@ -156,6 +147,15 @@ public class ITunesParser implements ModuleParser {
             if (complete != null) {
                 feedInfo.setComplete("yes".equals(complete.getTextTrim().toLowerCase()));
             }
+            
+            final Element newFeedUrl = element.getChild("new-feed-url", ns);
+            if (newFeedUrl != null) {
+                try {
+                    feedInfo.setNewFeedUrl(new URL(newFeedUrl.getTextTrim()));
+                } catch (final MalformedURLException e) {
+                    LOG.debug("Malformed URL Exception reading itunes:new-feed-url tag: {}", newFeedUrl.getTextTrim());
+                }
+            }
 
         } else if (element.getName().equals("item")) {
             final EntryInformationImpl entryInfo = new EntryInformationImpl();
@@ -170,12 +170,14 @@ public class ITunesParser implements ModuleParser {
             }
 
             final Element isClosedCaptioned = element.getChild("isClosedCaptioned", ns);
-            if (isClosedCaptioned != null) {
+
+            if (isClosedCaptioned != null && isClosedCaptioned.getValue() != null ) {
                 entryInfo.setClosedCaptioned(EntryInformation.ClosedCaptioned.valueOf(isClosedCaptioned.getTextTrim().toLowerCase()));
             }
 
             final Element order = element.getChild("order", ns);
-            if (order != null) {
+
+            if (order != null && order.getValue() != null) {
                 entryInfo.setOrder(Integers.parse(order.getTextTrim()));
             }
         }
@@ -188,23 +190,15 @@ public class ITunesParser implements ModuleParser {
             }
 
             final Element block = element.getChild("block", ns);
+
             if (block != null) {
                 module.setBlock("yes".equals(block.getTextTrim().toLowerCase()));
             }
 
             final Element explicit = element.getChild("explicit", ns);
-            if (explicit != null) {
-                module.setExplicit(ITunes.Explicit.valueOf(explicit.getTextTrim().toLowerCase()));
-            }
 
-            final Element image = element.getChild("image", ns);
-            if (image != null && image.getAttributeValue("href") != null) {
-                try {
-                    final URL imageURL = new URL(image.getAttributeValue("href").trim());
-                    module.setImage(imageURL);
-                } catch (final MalformedURLException e) {
-                    LOG.debug("Malformed URL Exception reading itunes:image tag: {}", image.getAttributeValue("href"));
-                }
+            if (explicit != null && explicit.getValue() != null) {
+                module.setExplicit(ITunes.Explicit.valueOf(explicit.getTextTrim().toLowerCase()));
             }
 
             final Element keywords = element.getChild("keywords", ns);
@@ -231,15 +225,23 @@ public class ITunesParser implements ModuleParser {
             if (summary != null) {
                 module.setSummary(summary.getTextTrim());
             }
+
+            final Element image = element.getChild("image", ns);
+
+            if (image != null && image.getAttributeValue("href") != null) {
+                try {
+                    final URL imageURL = new URL(image.getAttributeValue("href").trim());
+                    module.setImage(imageURL);
+                } catch (final MalformedURLException e) {
+                    LOG.debug("Malformed URL Exception reading itunes:image tag: {}", image.getAttributeValue("href"));
+                }
+            }
+
         }
 
         return module;
     }
 
-    /**
-     * @param e source element
-     * @return text content of all child nodes
-     */
     protected String getXmlInnerText(final Element e) {
         final StringBuffer sb = new StringBuffer();
         final XMLOutputter xo = new XMLOutputter();
