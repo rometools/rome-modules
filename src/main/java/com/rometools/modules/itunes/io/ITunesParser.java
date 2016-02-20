@@ -109,17 +109,6 @@ public class ITunesParser implements ModuleParser {
                 }
             }
 
-            final Element image = element.getChild("image", ns);
-
-            if (image != null && image.getAttributeValue("href") != null) {
-                try {
-                    final URL imageURL = new URL(image.getAttributeValue("href").trim());
-                    feedInfo.setImage(imageURL);
-                } catch (final MalformedURLException e) {
-                    LOG.debug("Malformed URL Exception reading itunes:image tag: {}", image.getAttributeValue("href"));
-                }
-            }
-
             final List<Element> categories = element.getChildren("category", ns);
             for (final Element element2 : categories) {
                 final Element category = element2;
@@ -139,6 +128,16 @@ public class ITunesParser implements ModuleParser {
                 }
             }
 
+            final Element complete = element.getChild("complete", ns);
+            if (complete != null) {
+                feedInfo.setComplete("yes".equals(complete.getTextTrim().toLowerCase()));
+            }
+
+            final Element newFeedUrl = element.getChild("new-feed-url", ns);
+            if (newFeedUrl != null) {
+                feedInfo.setNewFeedUrl(newFeedUrl.getTextTrim());
+            }
+
         } else if (element.getName().equals("item")) {
             final EntryInformationImpl entryInfo = new EntryInformationImpl();
             module = entryInfo;
@@ -150,6 +149,19 @@ public class ITunesParser implements ModuleParser {
             if (duration != null && duration.getValue() != null) {
                 final Duration dur = new Duration(duration.getValue().trim());
                 entryInfo.setDuration(dur);
+            }
+
+            final Element closedCaptioned = element.getChild("isClosedCaptioned", ns);
+
+            if (closedCaptioned != null && closedCaptioned.getValue() != null && closedCaptioned.getValue().trim().equalsIgnoreCase("yes")) {
+                entryInfo.setClosedCaptioned(true);
+            }
+
+            final Element order = element.getChild("order", ns);
+
+            if (order != null && order.getValue() != null) {
+                final Integer o = Integer.valueOf(order.getValue().trim());
+                entryInfo.setOrder(o);
             }
         }
         if (module != null) {
@@ -195,6 +207,17 @@ public class ITunesParser implements ModuleParser {
 
             if (summary != null) {
                 module.setSummary(summary.getTextTrim());
+            }
+
+            final Element image = element.getChild("image", ns);
+
+            if (image != null && image.getAttributeValue("href") != null) {
+                try {
+                    final URL imageURL = new URL(image.getAttributeValue("href").trim());
+                    module.setImage(imageURL);
+                } catch (final MalformedURLException e) {
+                    LOG.debug("Malformed URL Exception reading itunes:image tag: {}", image.getAttributeValue("href"));
+                }
             }
         }
 
